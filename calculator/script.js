@@ -9,6 +9,7 @@ class Calculator {
     this.current = '';
     this.previous = '';
     this.operation = undefined;
+    this.previousOperand.innerText = '';
   }
 
   appendNumber(number) {
@@ -21,10 +22,10 @@ class Calculator {
 
   updateDisplay() {
     this.currentOperand.innerText = this.getDisplayNumber(this.current);
-    if(this.operation != null){
+    if (this.operation != null) {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ${this.operation}`;
     }
-    
+
   }
 
   chooseOperation(operation) {
@@ -60,21 +61,21 @@ class Calculator {
       case '÷':
         result = prev / curt;
         break
-      // case '&#8730;':
-      //   result = Math.sqrt(prev);
-      //   console.log(result)
-      //   break
+        // case '&#8730;':
+        //   result = Math.sqrt(prev);
+        //   console.log(result)
+        //   break
       case 'x n':
         result = Math.pow(prev, curt);
         console.log(result)
         break
-      // case '| x |':
-      //   result = Math.abs(prev);
-      //   console.log(result)
-      //   break
-      // case '+':
-      //   result = prev + curt;
-      //   break
+        // case '| x |':
+        //   result = Math.abs(prev);
+        //   console.log(result)
+        //   break
+        // case '+':
+        //   result = prev + curt;
+        //   break
       default:
         return
     }
@@ -83,28 +84,26 @@ class Calculator {
     this.previous = '';
   }
 
-  delete(){
-    this.current = this.current.toString().slice(0,-1);
+  delete() {
+    if (this.current === '') {
+      this.clear()
+    } else {
+      this.current = this.current.toString().slice(0, -1);    
+    }
+ 
   }
 
-  getDisplayNumber(number){
+  getDisplayNumber(number) {
     const floatNumber = parseFloat(number);
-    if(isNaN(floatNumber)){
+    if (isNaN(floatNumber)) {
       return '';
     }
-        return floatNumber.toLocaleString('ru',{
-      maximumFractionDigits:10
+    return floatNumber.toLocaleString('ru', {
+      maximumFractionDigits: 10
     });
   }
 
 }
-
-
-
-
-
-
-
 
 const numberBtn = document.querySelectorAll('[data-number]');
 const operationBtn = document.querySelectorAll('[data-operation]');
@@ -125,7 +124,7 @@ numberBtn.forEach(button => {
 
 operationBtn.forEach(button => {
   button.addEventListener('click', () => {
-    console.log(button.innerText);
+
     calculator.chooseOperation(button.innerText);
     calculator.updateDisplay();
   })
