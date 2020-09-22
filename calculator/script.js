@@ -23,34 +23,33 @@ class Calculator {
     }
   }
 
-
-  updateDisplay() {
+  updateDisplay() {    
     this.currentOperand.innerText = this.getDisplayNumber(this.current);
-    if (this.operation != null) {
+    if (this.operation === 'x n') {
+      this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
+    } else if (this.operation != null) {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ${this.operation}`;
     }
-
   }
 
   updateDisplayEqual() {
-    this.currentOperand.innerText = this.getDisplayNumber(this.current);
-    this.previousOperand.innerText = ``;
+    if (this.current !== this.current) {
+      this.currentOperand.innerText = 'ЭТО НЕВОЗМОЖНО';
+    } else {
+      this.currentOperand.innerText = this.getDisplayNumber(this.current);
+      this.previousOperand.innerText = ``;
+    }
   }
 
   chooseOperation(operation) {
-
     if (operation === '-' && this.current === '') {
       this.current = `-`;
       this.currentOperand.innerText = '-';
       this.appendNumber();
     }
 
-    if (operation === 'log' || operation === '√' && this.current >= 0) {
-      this.computeOne();
-    }
-
-    if (operation === '| x |') {
-      this.computeOne();
+    if (operation === 'log' || operation === '√' || operation === '| x |') {
+            this.computeOne();
     }
 
     if (this.previous !== '') {
@@ -64,14 +63,10 @@ class Calculator {
 
   computeOne() {
     let result;
-    console.log('пред ' + this.previous);
-    console.log('след ' + this.current);
-    console.log('опер ' + this.operation);
     const prev = parseFloat(this.previous);
-
     switch (this.operation) {
-      case 'log':
-        result = Math.log(prev);
+      case 'log':     
+        result = Math.log(prev);    
         break
       case '√':
         result = Math.sqrt(prev);
@@ -85,8 +80,6 @@ class Calculator {
     this.previous = prev;
     this.current = result;
     this.operation = undefined;
-
-    console.log(this.current)
   }
 
   computeTwo() {
