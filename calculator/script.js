@@ -16,7 +16,11 @@ class Calculator {
     if (number === '.' && this.current.includes('.')) {
       return
     }
-    this.current = this.current.toString() + number.toString();
+    if (number === '-') {
+      this.current = number + this.current;
+    } else {
+      this.current = this.current.toString() + number.toString();
+    }
   }
 
 
@@ -28,19 +32,64 @@ class Calculator {
 
   }
 
+  updateDisplayEqual() {
+    this.currentOperand.innerText = this.getDisplayNumber(this.current);
+    this.previousOperand.innerText = ``;
+  }
+
   chooseOperation(operation) {
-    if (this.current === '') {
-      return
+
+    if (operation === '-' && this.current === '') {
+      this.current = `-`;
+      this.currentOperand.innerText = '-';
+      this.appendNumber();
     }
+
+    if (operation === 'log' || operation === '√' && this.current >= 0) {
+      this.computeOne();
+    }
+
+    if (operation === '| x |') {
+      this.computeOne();
+    }
+
     if (this.previous !== '') {
-      this.compute();
+      this.computeTwo();
     }
+
     this.operation = operation;
     this.previous = this.current;
     this.current = ''
   }
 
-  compute() {
+  computeOne() {
+    let result;
+    console.log('пред ' + this.previous);
+    console.log('след ' + this.current);
+    console.log('опер ' + this.operation);
+    const prev = parseFloat(this.previous);
+
+    switch (this.operation) {
+      case 'log':
+        result = Math.log(prev);
+        break
+      case '√':
+        result = Math.sqrt(prev);
+        break
+      case '| x |':
+        result = Math.abs(prev);
+        break
+      default:
+        return
+    }
+    this.previous = prev;
+    this.current = result;
+    this.operation = undefined;
+
+    console.log(this.current)
+  }
+
+  computeTwo() {
     let result;
     const prev = parseFloat(this.previous);
     const curt = parseFloat(this.current);
@@ -49,11 +98,9 @@ class Calculator {
     switch (this.operation) {
       case '+':
         result = prev + curt;
-        console.log(result)
         break
       case '-':
         result = prev - curt;
-        console.log(result)
         break
       case '*':
         result = prev * curt;
@@ -61,21 +108,10 @@ class Calculator {
       case '÷':
         result = prev / curt;
         break
-        // case '&#8730;':
-        //   result = Math.sqrt(prev);
-        //   console.log(result)
-        //   break
       case 'x n':
         result = Math.pow(prev, curt);
         console.log(result)
         break
-        // case '| x |':
-        //   result = Math.abs(prev);
-        //   console.log(result)
-        //   break
-        // case '+':
-        //   result = prev + curt;
-        //   break
       default:
         return
     }
@@ -88,9 +124,9 @@ class Calculator {
     if (this.current === '') {
       this.clear()
     } else {
-      this.current = this.current.toString().slice(0, -1);    
+      this.current = this.current.toString().slice(0, -1);
     }
- 
+
   }
 
   getDisplayNumber(number) {
@@ -101,6 +137,11 @@ class Calculator {
     return floatNumber.toLocaleString('ru', {
       maximumFractionDigits: 10
     });
+  }
+
+  compute() {
+    (this.operation === '√' || this.operation === '| x |' || this.operation === 'log') ? this.computeOne(): this.computeTwo()
+
   }
 
 }
@@ -124,15 +165,20 @@ numberBtn.forEach(button => {
 
 operationBtn.forEach(button => {
   button.addEventListener('click', () => {
-
     calculator.chooseOperation(button.innerText);
-    calculator.updateDisplay();
+    if (button.innerText === '√' || button.innerText === '| x |' || button.innerText === 'log') {
+      calculator.compute();
+      calculator.updateDisplayEqual();
+    } else {
+      calculator.updateDisplay();
+    }
+
   })
 })
 
 equalsBtn.addEventListener('click', button => {
   calculator.compute();
-  calculator.updateDisplay();
+  calculator.updateDisplayEqual();
 })
 
 allClearBtn.addEventListener('click', button => {
