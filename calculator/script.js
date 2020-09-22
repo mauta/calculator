@@ -16,10 +16,12 @@ class Calculator {
     if (number === '.' && this.current.includes('.')) {
       return
     }
-    if (number === '-') {
-      this.current = number + this.current;
+    if (number === '') {
+      this.current = -1 * this.current;
     } else {
-      this.current = this.current.toString() + number.toString();
+      console.log(this.current)
+      console.log(number)
+      this.current = String(this.current) + number.toString();
     }
   }
 
@@ -48,7 +50,7 @@ class Calculator {
       this.appendNumber();
     }
 
-    if (operation === 'log' || operation === '√' || operation === '| x |') {
+    if (operation === 'ln' || operation === '√' || operation === '| x |') {
             this.computeOne();
     }
 
@@ -65,7 +67,7 @@ class Calculator {
     let result;
     const prev = parseFloat(this.previous);
     switch (this.operation) {
-      case 'log':     
+      case 'ln':     
         result = Math.log(prev);    
         break
       case '√':
@@ -103,7 +105,6 @@ class Calculator {
         break
       case 'x n':
         result = Math.pow(prev, curt);
-        console.log(result)
         break
       default:
         return
@@ -133,7 +134,7 @@ class Calculator {
   }
 
   compute() {
-    (this.operation === '√' || this.operation === '| x |' || this.operation === 'log') ? this.computeOne(): this.computeTwo()
+    (this.operation === '√' || this.operation === '| x |' || this.operation === 'ln') ? this.computeOne(): this.computeTwo()
 
   }
 
@@ -159,7 +160,7 @@ numberBtn.forEach(button => {
 operationBtn.forEach(button => {
   button.addEventListener('click', () => {
     calculator.chooseOperation(button.innerText);
-    if (button.innerText === '√' || button.innerText === '| x |' || button.innerText === 'log') {
+    if (button.innerText === '√' || button.innerText === '| x |' || button.innerText === 'ln') {
       calculator.compute();
       calculator.updateDisplayEqual();
     } else {
