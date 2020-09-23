@@ -13,19 +13,31 @@ class Calculator {
   }
 
   appendNumber(number) {
-    if (number === '.' && this.current.includes('.')) {
-      return
-    }
+
     if (number === '') {
       this.current = -1 * this.current;
     } else {
-      console.log(this.current)
-      console.log(number)
       this.current = String(this.current) + number.toString();
     }
   }
 
-  updateDisplay() {    
+  drawDot() {
+    let before = 0;
+    if (this.current === '') {
+      this.current = before + '.';
+    } else this.current = this.current + '.'
+  }
+
+  // updateDisplay() {
+  //   this.currentOperand.innerText = this.current;
+  //   if (this.operation === 'x n') {
+  //     this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
+  //   } else if (this.operation != null) {
+  //     this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ${this.operation}`;
+  //   }
+  // }
+
+  updateDisplay() {
     this.currentOperand.innerText = this.getDisplayNumber(this.current);
     if (this.operation === 'x n') {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
@@ -33,6 +45,8 @@ class Calculator {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ${this.operation}`;
     }
   }
+
+
 
   updateDisplayEqual() {
     if (this.current !== this.current) {
@@ -51,7 +65,7 @@ class Calculator {
     }
 
     if (operation === 'ln' || operation === '√' || operation === '| x |') {
-            this.computeOne();
+      this.computeOne();
     }
 
     if (this.previous !== '') {
@@ -67,8 +81,8 @@ class Calculator {
     let result;
     const prev = parseFloat(this.previous);
     switch (this.operation) {
-      case 'ln':     
-        result = Math.log(prev);    
+      case 'ln':
+        result = Math.log(prev);
         break
       case '√':
         result = Math.sqrt(prev);
@@ -123,8 +137,33 @@ class Calculator {
 
   }
 
+  // getDisplayNumber(number) {
+  //   console.log(number);
+  //   let floatNumber
+  //   const dotPosition = number.indexOf('.')
+  //   const dlina = number.slice(dotPosition + 1).length;
+  //   console.log(dlina)
+  //   if (dotPosition != -1 && number.slice(-1) === '0') {
+  //     console.log(',fkfkfkf')
+  //     floatNumber = parseFloat(number).toPrecision(dlina);
+  //     console.log(floatNumber)
+  //   } else {
+  //     floatNumber = parseFloat(number);
+  //   }
+
+  //   if (isNaN(floatNumber)) {
+  //     return '';
+  //   }
+  //   return floatNumber.toLocaleString('ru', {
+  //     maximumFractionDigits: 10
+  //   });
+  // }
+
+
+
   getDisplayNumber(number) {
-    const floatNumber = parseFloat(number);
+    console.log(typeof(number))
+       const floatNumber = parseFloat(number);
     if (isNaN(floatNumber)) {
       return '';
     }
@@ -132,6 +171,7 @@ class Calculator {
       maximumFractionDigits: 10
     });
   }
+
 
   compute() {
     (this.operation === '√' || this.operation === '| x |' || this.operation === 'ln') ? this.computeOne(): this.computeTwo()
@@ -144,6 +184,7 @@ const numberBtn = document.querySelectorAll('[data-number]');
 const operationBtn = document.querySelectorAll('[data-operation]');
 const equalsBtn = document.querySelector('[data-equals]');
 const deleteBtn = document.querySelector('[data-delete]');
+const dotBtn = document.querySelector('[data-dot]');
 const allClearBtn = document.querySelector('[data-all-clear]');
 const previousOperand = document.querySelector('[data-previous-operand]');
 const currentOperand = document.querySelector('[data-current-operand]');
@@ -152,10 +193,17 @@ const calculator = new Calculator(previousOperand, currentOperand)
 
 numberBtn.forEach(button => {
   button.addEventListener('click', () => {
+
     calculator.appendNumber(button.innerText);
     calculator.updateDisplay();
   })
 })
+
+dotBtn.addEventListener('click', button => {
+  calculator.drawDot();
+  calculator.updateDisplay();
+})
+
 
 operationBtn.forEach(button => {
   button.addEventListener('click', () => {
