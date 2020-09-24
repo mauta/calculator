@@ -2,6 +2,7 @@ class Calculator {
   constructor(previousOperand, currentOperand) {
     this.previousOperand = previousOperand;
     this.currentOperand = currentOperand;
+    this.readyToReset = false;
     this.clear();
   }
 
@@ -23,21 +24,16 @@ class Calculator {
 
   drawDot() {
     let before = 0;
+    if (this.current.includes('.')) return;
     if (this.current === '') {
       this.current = before + '.';
     } else this.current = this.current + '.'
   }
 
-  // updateDisplay() {
-  //   this.currentOperand.innerText = this.current;
-  //   if (this.operation === 'x n') {
-  //     this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
-  //   } else if (this.operation != null) {
-  //     this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ${this.operation}`;
-  //   }
-  // }
+
 
   updateDisplay() {
+    console.log('приходит на печать ' + this.current)
     this.currentOperand.innerText = this.getDisplayNumber(this.current);
     if (this.operation === 'x n') {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
@@ -55,6 +51,7 @@ class Calculator {
       this.currentOperand.innerText = this.getDisplayNumber(this.current);
       this.previousOperand.innerText = ``;
     }
+    this.previous = '';
   }
 
   chooseOperation(operation) {
@@ -93,6 +90,7 @@ class Calculator {
       default:
         return
     }
+    this.readyToReset = true;
     this.previous = prev;
     this.current = result;
     this.operation = undefined;
@@ -123,6 +121,7 @@ class Calculator {
       default:
         return
     }
+    this.readyToReset = true;
     this.current = result;
     this.operation = undefined;
     this.previous = '';
@@ -137,40 +136,30 @@ class Calculator {
 
   }
 
-  // getDisplayNumber(number) {
-  //   console.log(number);
-  //   let floatNumber
-  //   const dotPosition = number.indexOf('.')
-  //   const dlina = number.slice(dotPosition + 1).length;
-  //   console.log(dlina)
-  //   if (dotPosition != -1 && number.slice(-1) === '0') {
-  //     console.log(',fkfkfkf')
-  //     floatNumber = parseFloat(number).toPrecision(dlina);
-  //     console.log(floatNumber)
-  //   } else {
-  //     floatNumber = parseFloat(number);
-  //   }
-
-  //   if (isNaN(floatNumber)) {
-  //     return '';
-  //   }
-  //   return floatNumber.toLocaleString('ru', {
-  //     maximumFractionDigits: 10
-  //   });
-  // }
-
-
 
   getDisplayNumber(number) {
-    console.log(typeof(number))
-       const floatNumber = parseFloat(number);
-    if (isNaN(floatNumber)) {
-      return '';
+    if (number === '-') return number;
+
+    const stringNumber = number.toString();
+    const integerDigits = parseFloat(stringNumber.split('.')[0]);
+    const decimalDigits = stringNumber.split('.')[1];
+    let integerDisplay;
+
+    if (isNaN(integerDigits)) {
+      integerDisplay = '';
+    } else {
+      integerDisplay = integerDigits.toLocaleString('ru', {
+        maximumFractionDigits: 10
+      });
     }
-    return floatNumber.toLocaleString('ru', {
-      maximumFractionDigits: 10
-    });
+
+    if (decimalDigits != null) {
+      return `${integerDisplay},${decimalDigits}`;
+    } else {
+      return integerDisplay;
+    }
   }
+
 
 
   compute() {
@@ -193,11 +182,23 @@ const calculator = new Calculator(previousOperand, currentOperand)
 
 numberBtn.forEach(button => {
   button.addEventListener('click', () => {
-
-    calculator.appendNumber(button.innerText);
+    console.log('превиусоперанд '+ calculator.previous)
+    console.log('курентоперанд ' + calculator.current)
+    console.log('редитуресет ' + calculator.readyToReset)
+    if (calculator.previous === "" &&
+      calculator.current !== "" &&
+      calculator.readyToReset) {
+        console.log('зашла сюда')
+      calculator.current = "";
+      calculator.readyToReset = false;
+    }
+    calculator.appendNumber(button.innerText)
     calculator.updateDisplay();
   })
 })
+
+
+
 
 dotBtn.addEventListener('click', button => {
   calculator.drawDot();
