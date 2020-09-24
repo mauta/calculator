@@ -92,7 +92,7 @@ class Calculator {
     }
     this.readyToReset = true;
     this.previous = prev;
-    this.current = result;
+    this.current = parseFloat(result.toFixed(10));
     this.operation = undefined;
   }
 
@@ -122,7 +122,7 @@ class Calculator {
         return
     }
     this.readyToReset = true;
-    this.current = result;
+    this.current = parseFloat(result.toFixed(10));
     this.operation = undefined;
     this.previous = '';
   }
@@ -156,7 +156,9 @@ class Calculator {
     if (decimalDigits != null) {
       return `${integerDisplay},${decimalDigits}`;
     } else {
-      return integerDisplay;
+      return integerDisplay.toLocaleString('ru', {
+        maximumFractionDigits: 10
+      });
     }
   }
 
