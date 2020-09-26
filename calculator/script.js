@@ -27,6 +27,8 @@ class Calculator {
     if (this.current.includes('.')) return;
     if (this.current === '') {
       this.current = before + '.';
+    } else if (this.current === '-') {
+      this.current = '-' + before + '.';
     } else this.current = this.current + '.'
   }
 
@@ -184,13 +186,13 @@ const calculator = new Calculator(previousOperand, currentOperand)
 
 numberBtn.forEach(button => {
   button.addEventListener('click', () => {
-    console.log('превиусоперанд '+ calculator.previous)
+    console.log('превиусоперанд ' + calculator.previous)
     console.log('курентоперанд ' + calculator.current)
     console.log('редитуресет ' + calculator.readyToReset)
     if (calculator.previous === "" &&
       calculator.current !== "" &&
       calculator.readyToReset) {
-        console.log('зашла сюда')
+      console.log('зашла сюда')
       calculator.current = "";
       calculator.readyToReset = false;
     }
