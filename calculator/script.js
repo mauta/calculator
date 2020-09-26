@@ -18,7 +18,7 @@ class Calculator {
     if (number === '') {
       this.current = -1 * this.current;
     } else {
-      this.current = String(this.current) + number.toString();
+      this.current = this.current.toString() + number.toString();
     }
   }
 
@@ -35,7 +35,6 @@ class Calculator {
 
 
   updateDisplay() {
-    console.log('приходит на печать ' + this.current)
     this.currentOperand.innerText = this.getDisplayNumber(this.current);
     if (this.operation === 'x n') {
       this.previousOperand.innerText = `${this.getDisplayNumber(this.previous)} ^ `;
@@ -186,13 +185,9 @@ const calculator = new Calculator(previousOperand, currentOperand)
 
 numberBtn.forEach(button => {
   button.addEventListener('click', () => {
-    console.log('превиусоперанд ' + calculator.previous)
-    console.log('курентоперанд ' + calculator.current)
-    console.log('редитуресет ' + calculator.readyToReset)
     if (calculator.previous === "" &&
       calculator.current !== "" &&
-      calculator.readyToReset) {
-      console.log('зашла сюда')
+      calculator.readyToReset) { 
       calculator.current = "";
       calculator.readyToReset = false;
     }
