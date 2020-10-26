@@ -14,12 +14,10 @@ class Calculator {
   }
 
   appendNumber(number) {
+  
+    this.current = this.current.toString() + number.toString();
 
-    if (number === '') {
-      this.current = -1 * this.current;
-    } else {
-      this.current = this.current.toString() + number.toString();
-    }
+   
   }
 
   drawDot() {
@@ -59,7 +57,6 @@ class Calculator {
     if (operation === '-' && this.current === '') {
       this.current = `-`;
       this.currentOperand.innerText = '-';
-      this.appendNumber();
     }
 
     if (operation === 'ln' || operation === '√' || operation === '| x |') {
