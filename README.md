@@ -1,4 +1,4 @@
-## Task 1. Calculator для [RS School](https://rs.school/)
+## Task 2. Calculator для [RS School](https://rs.school/)
 
 [Готовый калькулятор](https://mauta.github.io/calculator/calculator/)
 
